@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion } from "mframer-motion";
 import { FlipWords } from "./FlipWords";
 
 const HeroText = () => {
