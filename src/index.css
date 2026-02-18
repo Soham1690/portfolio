@@ -1,0 +1,119 @@
+@import url("https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300..800&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ================= GLOBAL ================= */
+
+body {
+  background: #030412;
+  font-family: "Funnel Display", sans-serif;
+  color: white;
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
+/* Layout */
+.c-space {
+  @apply px-5 sm:px-10 lg:px-16;
+}
+
+.section-spacing {
+  @apply min-h-screen mt-20 md:mt-28;
+}
+
+.text-heading {
+  @apply font-bold text-3xl md:text-4xl;
+}
+
+.headtext {
+  @apply mt-2 mb-2 text-xl;
+}
+
+.subtext {
+  @apply text-neutral-400 text-sm md:text-base;
+}
+
+/* Navigation */
+.nav-ul {
+  @apply flex flex-col items-center gap-4 sm:flex-row md:gap-6 relative z-20;
+}
+
+.nav-li {
+  @apply text-neutral-400 hover:text-white max-sm:w-full max-sm:rounded-md py-2 max-sm:px-5;
+}
+
+.nav-link {
+  @apply text-lg md:text-base hover:text-white transition-colors;
+}
+
+/* Button */
+.btn {
+  @apply relative px-6 py-3 text-sm text-center rounded-full bg-indigo-600 hover:bg-indigo-700 transition cursor-pointer;
+}
+
+/* About Section Grid */
+.grid-1 {
+  @apply row-span-2 md:col-span-3 h-[15rem] md:h-full relative overflow-hidden hover:-translate-y-1 duration-200;
+}
+
+.grid-2 {
+  @apply row-span-1 md:col-span-3 h-[15rem] md:h-full relative overflow-hidden hover:-translate-y-1 duration-200;
+}
+
+.grid-3 {
+  @apply row-span-1 md:col-span-3 h-[15rem] md:h-full relative overflow-hidden hover:-translate-y-1 duration-200;
+}
+
+.grid-4 {
+  @apply row-span-1 md:col-span-2 h-[15rem] md:h-full relative overflow-hidden hover:-translate-y-1 duration-200;
+}
+
+.grid-5 {
+  @apply row-span-1 md:col-span-4 h-[15rem] md:h-full relative overflow-hidden hover:-translate-y-1 duration-200;
+}
+
+.grid-default-color {
+  @apply p-6 bg-gradient-to-b from-indigo-900 to-indigo-800 rounded-2xl;
+}
+
+.grid-special-color {
+  @apply p-6 bg-gradient-to-b from-purple-600 to-indigo-600 rounded-2xl;
+}
+
+.grid-black-color {
+  @apply p-6 bg-gradient-to-tl from-neutral-800 via-neutral-900 to-neutral-800 rounded-2xl;
+}
+
+/* Contact */
+.field-label {
+  @apply text-sm font-medium;
+}
+
+.field-input {
+  @apply w-full rounded-md px-3 py-2 text-sm bg-white/10 border border-white/10 mt-2;
+}
+
+.field-input-focus {
+  @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20;
+}
+@keyframes blob1 {
+  0% { transform: translate(0px, 0px) scale(1); }
+  50% { transform: translate(100px, 50px) scale(1.2); }
+  100% { transform: translate(0px, 0px) scale(1); }
+}
+
+@keyframes blob2 {
+  0% { transform: translate(0px, 0px) scale(1); }
+  50% { transform: translate(-100px, -50px) scale(1.2); }
+  100% { transform: translate(0px, 0px) scale(1); }
+}
+
+.animate-blob1 {
+  animation: blob1 18s infinite ease-in-out;
+}
+
+.animate-blob2 {
+  animation: blob2 22s infinite ease-in-out;
+}

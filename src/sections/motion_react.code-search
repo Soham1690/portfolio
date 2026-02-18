@@ -1,0 +1,32 @@
+# Query: motion/react
+# ContextLines: 1
+
+6 results - 6 files
+
+src\components\globe.jsx:
+  3  import createGlobe from "cobe";
+  4: import { useMotionValue, useSpring } from "framer-motion";
+  5  import { useEffect, useRef } from "react";
+
+src\components\HeroText.jsx:
+  1  import { FlipWords } from "./FlipWords";
+  2: import { motion } from "motion/react";
+  3  
+
+src\components\parallaxBackground.jsx:
+  1: import { motion, useScroll, useSpring, useTransform } from "motion/react";
+  2  
+
+src\components\ProjectDetails.jsx:
+  1: import { motion } from "motion/react";
+  2  const ProjectDetails = ({
+
+src\sections\Navbar.jsx:
+  1  import { useState } from "react";
+  2: import { motion } from "motion/react";
+  3  function Navigation() {
+
+src\sections\Projects.jsx:
+  3  import { myProjects } from "../constants";
+  4: import { motion, useMotionValue, useSpring } from "motion/react";
+  5  const Projects = () => {
