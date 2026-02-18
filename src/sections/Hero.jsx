@@ -31,11 +31,11 @@ const Hero = () => {
       </div>
 
       {/* 3D MODEL SECTION - RESPONSIVE FIX */}
-      <div className="relative w-full h-[420px] sm:absolute sm:bottom-0 sm:h-[600px] mt-8 sm:mt-0 overflow-visible">
-  <div className="w-full h-full scale-90 sm:scale-100 origin-center">
-    <ComputersCanvas />
-  </div>
+  {/* 3D MODEL SECTION */}
+<div className="relative w-full h-[520px] sm:absolute sm:bottom-0 sm:h-[600px] mt-10 sm:mt-0 overflow-hidden">
+  <ComputersCanvas />
 </div>
+
 
       {/* SCROLL INDICATOR */}
       <div className="absolute bottom-6 w-full flex justify-center items-center">
