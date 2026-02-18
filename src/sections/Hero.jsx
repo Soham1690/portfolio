@@ -6,13 +6,12 @@ const Hero = () => {
   return (
     <section
       className="relative w-full min-h-screen mx-auto bg-cover bg-center bg-no-repeat"
-
       style={{ backgroundImage: "url('/my-bg.png.png')" }}
     >
       {/* LEFT TEXT CONTENT */}
       <div
-       className={`absolute left-0 right-0 max-w-7xl mx-auto ${styles.paddingX} mt-28 flex flex-row items-start gap-5`}
-  >
+        className={`absolute left-0 right-0 max-w-7xl mx-auto ${styles.paddingX} mt-10 flex flex-row items-start gap-5`}
+      >
         <div className="flex flex-col justify-center items-center mt-5">
           <div className="w-5 h-5 rounded-full bg-[#915EFF]" />
           <div className="w-1 sm:h-80 h-40 violet-gradient" />
@@ -24,17 +23,19 @@ const Hero = () => {
           </h1>
 
           <p className={`${styles.heroSubText} mt-2 text-white-100`}>
-            A Developer Dedicated to Crafting <br className="sm:block hidden" />
+            A Developer Dedicated to Crafting{" "}
+            <br className="sm:block hidden" />
             Modern & Scalable Web Solutions
           </p>
         </div>
       </div>
 
-      {/* 3D MODEL SECTION */}
-      <div className="absolute -bottom-11 w-full h-[420px] sm:h-[600px]">
-
-        <ComputersCanvas />
-      </div>
+      {/* 3D MODEL SECTION - RESPONSIVE FIX */}
+      <div className="relative w-full h-[420px] sm:absolute sm:bottom-0 sm:h-[600px] mt-8 sm:mt-0 overflow-visible">
+  <div className="w-full h-full scale-90 sm:scale-100 origin-center">
+    <ComputersCanvas />
+  </div>
+</div>
 
       {/* SCROLL INDICATOR */}
       <div className="absolute bottom-6 w-full flex justify-center items-center">
