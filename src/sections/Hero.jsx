@@ -10,7 +10,11 @@ const Hero = () => {
     >
       {/* LEFT TEXT CONTENT */}
       <div
-        className={`absolute inset-0 top-[100px] max-w-7xl mx-auto ${styles.paddingX} flex flex-row items-start gap-5`}
+       className={`absolute left-0 right-0 max-w-7xl mx-auto ${styles.paddingX} mt-28 flex flex-row items-start gap-5`}
+
+
+
+
       >
         <div className="flex flex-col justify-center items-center mt-5">
           <div className="w-5 h-5 rounded-full bg-[#915EFF]" />
@@ -30,7 +34,8 @@ const Hero = () => {
       </div>
 
       {/* 3D MODEL SECTION */}
-      <div className="absolute bottom-0 w-full h-[420px] sm:h-[600px]">
+      <div className="absolute -bottom-0 w-full h-[420px] sm:h-[600px]">
+
         <ComputersCanvas />
       </div>
 
