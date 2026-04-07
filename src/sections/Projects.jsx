@@ -12,6 +12,8 @@ const ProjectCard = ({ project }) => {
   const rotateY = useSpring(rawY, { stiffness: 200, damping: 25 });
 
   const handleMouseMove = (e) => {
+    if (!cardRef.current) return;
+
     const rect = cardRef.current.getBoundingClientRect();
     const width = rect.width;
     const height = rect.height;
@@ -21,7 +23,7 @@ const ProjectCard = ({ project }) => {
 
     const intensity = 18;
 
-    const rotateYValue = (x / width - 0.5) * intensity;
+    const rotateYValue = ((x / width) - 0.5) * intensity;
 
     const bottomZone = Math.min((height - y) / (height * 150), 100);
     const verticalFactor = 1 - bottomZone;
@@ -36,17 +38,24 @@ const ProjectCard = ({ project }) => {
     rawY.set(0);
   };
 
+  const liveLink =
+    project.href ||
+    project.link ||
+    project.url ||
+    (project.title === "E-commerce Platform"
+      ? "https://e-commerce-alpha-two-55.vercel.app/"
+      : null);
+
   return (
     <div className="relative group">
-      {/* Floating Link */}
-      {project.href && (
+      {liveLink && (
         <div className="absolute -top-10 left-1/2 -translate-x-1/2 flex flex-col items-center opacity-0 group-hover:opacity-100 transition duration-300 z-30">
           <a
-            href={project.href}
+            href={liveLink}
             target="_blank"
             rel="noopener noreferrer"
             onClick={(e) => e.stopPropagation()}
-            className="px-4 py-1 text-sm rounded-full bg-white/5 backdrop-blur-md border border-white/10 shadow-md hover:bg-white/10 transition pointer-events-auto"
+            className="px-4 py-1 text-sm text-white rounded-full bg-white/10 backdrop-blur-md border border-white/20 shadow-md hover:bg-white/20 transition"
           >
             Visit Site
           </a>
@@ -55,7 +64,6 @@ const ProjectCard = ({ project }) => {
         </div>
       )}
 
-      {/* Tilting Card */}
       <motion.div
         ref={cardRef}
         onMouseMove={handleMouseMove}
@@ -65,9 +73,8 @@ const ProjectCard = ({ project }) => {
           rotateY,
           transformPerspective: 2000,
         }}
-        className="bg-[#0f0f1a] rounded-xl border border-white/10 shadow-xl hover:shadow-indigo-500/30 transition duration-300"
+        className="bg-[#0f0f1a] rounded-xl border border-white/10 shadow-xl hover:shadow-indigo-500/30 transition duration-300 overflow-hidden"
       >
-        {/* Image */}
         <div className="overflow-hidden rounded-t-xl">
           <img
             src={project.image}
@@ -76,7 +83,6 @@ const ProjectCard = ({ project }) => {
           />
         </div>
 
-        {/* Content */}
         <div className="p-6 space-y-4">
           <h3 className="text-xl font-semibold">{project.title}</h3>
 
@@ -95,9 +101,9 @@ const ProjectCard = ({ project }) => {
             ))}
           </div>
 
-          {project.href && (
+          {liveLink && (
             <a
-              href={project.href}
+              href={liveLink}
               target="_blank"
               rel="noopener noreferrer"
               onClick={(e) => e.stopPropagation()}
