@@ -43,7 +43,7 @@ const ProjectCard = ({ project }) => {
     project.link ||
     project.url ||
     (project.title === "E-commerce Platform"
-      ? "https://e-commerce-alpha-two-55.vercel.app/"
+      ? "https://www.soham.buzz/"
       : null);
 
   return (
