@@ -21,17 +21,10 @@ const ProjectCard = ({ project }) => {
 
     const intensity = 18;
 
-    // Horizontal tilt (normal)
-    const rotateYValue = ((x / width) - 0.5) * intensity;
+    const rotateYValue = (x / width - 0.5) * intensity;
 
-    // ---- BOTTOM ONLY REACTS ----
-    // Only bottom 60% reacts
     const bottomZone = Math.min((height - y) / (height * 150), 100);
-
-    // Invert so bottom reacts more, top almost none
     const verticalFactor = 1 - bottomZone;
-
-    // Stronger bottom hinge feel
     const rotateXValue = Math.pow(verticalFactor, 2) * intensity;
 
     rawX.set(rotateXValue);
@@ -45,22 +38,24 @@ const ProjectCard = ({ project }) => {
 
   return (
     <div className="relative group">
+      {/* Floating Link */}
+      {project.href && (
+        <div className="absolute -top-10 left-1/2 -translate-x-1/2 flex flex-col items-center opacity-0 group-hover:opacity-100 transition duration-300 z-30">
+          <a
+            href={project.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={(e) => e.stopPropagation()}
+            className="px-4 py-1 text-sm rounded-full bg-white/5 backdrop-blur-md border border-white/10 shadow-md hover:bg-white/10 transition pointer-events-auto"
+          >
+            Visit Site
+          </a>
 
-      {/* Floating Link (does NOT tilt) */}
-      <div className="absolute -top-10 left-1/2 -translate-x-1/2 flex flex-col items-center opacity-0 group-hover:opacity-100 transition duration-400 z-30 pointer-events-none">
-        <a
-  href="https://e-commerce-alpha-two-55.vercel.app/"
-  target="_blank"
-  rel="noopener noreferrer"
-  className="px-4 py-1 text-sm rounded-full bg-white/5 backdrop-blur-md border border-white/10 shadow-md hover:bg-white/10 transition"
->
-  Visit Site
-</a>
+          <div className="w-[2px] h-16 bg-cyan-400 shadow-[0_0_15px_rgba(0,255,255,0.8)] mt-1" />
+        </div>
+      )}
 
-        <div className="w-[2px] h-16 bg-cyan-400 shadow-[0_0_15px_rgba(0,255,255,0.8)] mt-1" />
-      </div>
-
-      {/* TILTING CARD */}
+      {/* Tilting Card */}
       <motion.div
         ref={cardRef}
         onMouseMove={handleMouseMove}
@@ -83,9 +78,7 @@ const ProjectCard = ({ project }) => {
 
         {/* Content */}
         <div className="p-6 space-y-4">
-          <h3 className="text-xl font-semibold">
-            {project.title}
-          </h3>
+          <h3 className="text-xl font-semibold">{project.title}</h3>
 
           <p className="text-gray-400 text-sm leading-relaxed">
             {project.description}
@@ -102,14 +95,17 @@ const ProjectCard = ({ project }) => {
             ))}
           </div>
 
-          <a
-            href={project.href || "#"}
-            target="_blank"
-            rel="noreferrer"
-            className="inline-flex items-center gap-2 mt-4 text-indigo-400 hover:text-indigo-300 transition"
-          >
-            Check Live Site →
-          </a>
+          {project.href && (
+            <a
+              href={project.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => e.stopPropagation()}
+              className="inline-flex items-center gap-2 mt-4 text-indigo-400 hover:text-indigo-300 transition"
+            >
+              Check Live Site →
+            </a>
+          )}
         </div>
       </motion.div>
     </div>
