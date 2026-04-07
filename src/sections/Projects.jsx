@@ -48,9 +48,14 @@ const ProjectCard = ({ project }) => {
 
       {/* Floating Link (does NOT tilt) */}
       <div className="absolute -top-10 left-1/2 -translate-x-1/2 flex flex-col items-center opacity-0 group-hover:opacity-100 transition duration-400 z-30 pointer-events-none">
-        <span className="px-4 py-1 text-sm rounded-full bg-white/5 backdrop-blur-md border border-white/10 shadow-md">
-          Link
-        </span>
+        <a
+  href="https://e-commerce-alpha-two-55.vercel.app/"
+  target="_blank"
+  rel="noopener noreferrer"
+  className="px-4 py-1 text-sm rounded-full bg-white/5 backdrop-blur-md border border-white/10 shadow-md hover:bg-white/10 transition"
+>
+  Visit Site
+</a>
 
         <div className="w-[2px] h-16 bg-cyan-400 shadow-[0_0_15px_rgba(0,255,255,0.8)] mt-1" />
       </div>
