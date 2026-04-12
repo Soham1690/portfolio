@@ -20,11 +20,28 @@ const parkinsonProject = {
   ],
 };
 
+const drowsinessProject = {
+  id: 1000,
+  title: "Driver Drowsiness Detection using AI/ML",
+  description:
+    "A premium real-time driver safety web app that detects drowsiness using computer vision, head-down monitoring, alert systems, incident snapshots, and a deployed FastAPI + Vercel setup.",
+  image: "/images/drowsiness-dashboard.png",
+  href: "https://drowsiness-detection-system-five.vercel.app/",
+  tags: [
+    { id: 107, name: "React" },
+    { id: 108, name: "FastAPI" },
+    { id: 109, name: "OpenCV" },
+    { id: 110, name: "MediaPipe" },
+    { id: 111, name: "AI/ML" },
+    { id: 112, name: "Vercel" },
+  ],
+};
+
 const myProjects = Array.isArray(baseProjects)
   ? baseProjects.length > 0
-    ? [baseProjects[0], parkinsonProject, ...baseProjects.slice(1)]
-    : [parkinsonProject]
-  : [parkinsonProject];
+    ? [baseProjects[0], parkinsonProject, drowsinessProject, ...baseProjects.slice(1)]
+    : [parkinsonProject, drowsinessProject]
+  : [parkinsonProject, drowsinessProject];
 
 const ProjectCard = ({ project }) => {
   const cardRef = useRef(null);
