@@ -1,6 +1,30 @@
 import { motion, useMotionValue, useSpring } from "framer-motion";
-import { myProjects } from "../constants";
+import { myProjects as baseProjects } from "../constants";
 import { useRef } from "react";
+
+const parkinsonProject = {
+  id: 999,
+  title: "Parkinson Disease Classification using AI/ML",
+  description:
+    "An ultra-premium clinical-style machine learning web app that predicts Parkinsonian voice-pattern risk using biomedical speech biomarkers, a FastAPI backend, and a deployed Vercel frontend.",
+  image:
+    "https://plus.unsplash.com/premium_photo-1661767897334-bbfbdfdc4d1a?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTN8fGhlYWx0aGNhcmV8ZW58MHx8MHx8fDA%3D",
+  href: "https://parkinsons-frontend.vercel.app/",
+  tags: [
+    { id: 101, name: "React" },
+    { id: 102, name: "Vite" },
+    { id: 103, name: "FastAPI" },
+    { id: 104, name: "scikit-learn" },
+    { id: 105, name: "AI/ML" },
+    { id: 106, name: "Vercel" },
+  ],
+};
+
+const myProjects = Array.isArray(baseProjects)
+  ? baseProjects.length > 0
+    ? [baseProjects[0], parkinsonProject, ...baseProjects.slice(1)]
+    : [parkinsonProject]
+  : [parkinsonProject];
 
 const ProjectCard = ({ project }) => {
   const cardRef = useRef(null);
@@ -47,7 +71,7 @@ const ProjectCard = ({ project }) => {
       : null);
 
   return (
-    <div className="relative group">
+    <div className="relative group h-full w-full max-w-[420px]">
       {liveLink && (
         <div className="absolute -top-10 left-1/2 -translate-x-1/2 flex flex-col items-center opacity-0 group-hover:opacity-100 transition duration-300 z-30">
           <a
@@ -73,7 +97,7 @@ const ProjectCard = ({ project }) => {
           rotateY,
           transformPerspective: 2000,
         }}
-        className="bg-[#0f0f1a] rounded-xl border border-white/10 shadow-xl hover:shadow-indigo-500/30 transition duration-300 overflow-hidden"
+        className="bg-[#0f0f1a] rounded-xl border border-white/10 shadow-xl hover:shadow-indigo-500/30 transition duration-300 overflow-hidden h-full flex flex-col"
       >
         <div className="overflow-hidden rounded-t-xl">
           <img
@@ -83,14 +107,16 @@ const ProjectCard = ({ project }) => {
           />
         </div>
 
-        <div className="p-6 space-y-4">
-          <h3 className="text-xl font-semibold">{project.title}</h3>
+        <div className="p-6 flex flex-col flex-1">
+          <h3 className="text-xl font-semibold leading-tight min-h-[64px]">
+            {project.title}
+          </h3>
 
-          <p className="text-gray-400 text-sm leading-relaxed">
+          <p className="text-gray-400 text-sm leading-relaxed min-h-[120px] mt-4">
             {project.description}
           </p>
 
-          <div className="flex gap-2 flex-wrap pt-2">
+          <div className="flex gap-2 flex-wrap pt-2 min-h-[76px] content-start">
             {project.tags.map((tag) => (
               <span
                 key={tag.id}
@@ -107,7 +133,7 @@ const ProjectCard = ({ project }) => {
               target="_blank"
               rel="noopener noreferrer"
               onClick={(e) => e.stopPropagation()}
-              className="inline-flex items-center gap-2 mt-4 text-indigo-400 hover:text-indigo-300 transition"
+              className="inline-flex items-center gap-2 mt-auto pt-4 text-indigo-400 hover:text-indigo-300 transition"
             >
               Check Live Site →
             </a>
@@ -128,7 +154,7 @@ const Projects = () => {
         My Projects
       </h2>
 
-      <div className="grid md:grid-cols-3 gap-16 max-w-7xl mx-auto [perspective:2000px]">
+      <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-16 max-w-7xl mx-auto [perspective:2000px] place-items-center items-stretch">
         {myProjects.map((project) => (
           <ProjectCard key={project.id} project={project} />
         ))}
