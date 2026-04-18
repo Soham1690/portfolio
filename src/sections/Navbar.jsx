@@ -11,50 +11,48 @@ const Navbar = () => {
   ];
 
   return (
-    <header className="fixed top-0 left-0 w-full z-50 bg-black/40 backdrop-blur-md">
-      <div className="max-w-7xl mx-auto flex justify-between items-center px-6 py-4">
-
-        {/* Logo / Name */}
-        <a href="#home" className="text-white font-semibold text-lg">
+    <header className="fixed left-0 top-0 z-50 w-full border-b border-white/10 bg-[#030412]/70 text-white backdrop-blur-xl">
+      <div className="flex w-full items-center justify-between px-6 py-4 sm:px-10 md:px-14 lg:px-20 xl:px-28 2xl:px-36">
+        <a href="#home" className="text-lg font-black tracking-tight text-white">
           Soham
         </a>
 
-        {/* Desktop Menu */}
-        <nav className="hidden md:flex gap-8">
+        <nav className="hidden items-center gap-8 md:flex">
           {navItems.map((item) => (
             <a
               key={item.name}
               href={item.link}
-              className="text-neutral-300 hover:text-white transition duration-200"
+              className="text-sm font-medium text-white/70 transition duration-200 hover:text-white"
             >
               {item.name}
             </a>
           ))}
         </nav>
 
-        {/* Mobile Toggle */}
         <button
-          className="md:hidden text-white"
-          onClick={() => setIsOpen(!isOpen)}
+          type="button"
+          aria-label="Toggle menu"
+          aria-expanded={isOpen}
+          className="rounded-full border border-white/10 bg-white/[0.06] px-3 py-2 text-sm font-bold text-white md:hidden"
+          onClick={() => setIsOpen((current) => !current)}
         >
-          ☰
+          {isOpen ? "Close" : "Menu"}
         </button>
       </div>
 
-      {/* Mobile Menu */}
       {isOpen && (
-        <div className="md:hidden bg-black/90 backdrop-blur-md px-6 pb-6">
+        <nav className="border-t border-white/10 bg-[#030412]/95 px-6 pb-6 pt-2 backdrop-blur-xl md:hidden">
           {navItems.map((item) => (
             <a
               key={item.name}
               href={item.link}
               onClick={() => setIsOpen(false)}
-              className="block py-2 text-neutral-300 hover:text-white transition"
+              className="block rounded-2xl px-4 py-3 text-white/70 transition hover:bg-white/[0.06] hover:text-white"
             >
               {item.name}
             </a>
           ))}
-        </div>
+        </nav>
       )}
     </header>
   );

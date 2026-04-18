@@ -1,106 +1,204 @@
-import { useEffect, useState } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { styles } from "../styles";
-import ComputersCanvas from "../components/Computer.jsx";
+
+const ComputersCanvas = lazy(() => import("../components/Computer.jsx"));
+
+const getDeviceProfile = () => {
+  if (typeof window === "undefined") {
+    return {
+      isMobile: true,
+      prefersReducedMotion: true,
+      canUseWebGL: false,
+    };
+  }
+
+  let canUseWebGL = false;
+
+  try {
+    const canvas = document.createElement("canvas");
+    canUseWebGL = Boolean(
+      window.WebGLRenderingContext &&
+        (canvas.getContext("webgl") || canvas.getContext("experimental-webgl"))
+    );
+  } catch {
+    canUseWebGL = false;
+  }
+
+  return {
+    isMobile: window.matchMedia("(max-width: 900px)").matches,
+    prefersReducedMotion: window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+    canUseWebGL,
+  };
+};
+
+const HeroCanvasFallback = () => {
+  return (
+    <div className="flex h-full w-full items-center justify-center">
+      <div className="relative h-[18rem] w-[min(86vw,38rem)] overflow-hidden rounded-[2rem] border border-white/10 bg-black/25 p-5 shadow-2xl shadow-purple-950/30 backdrop-blur-xl">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(145,94,255,0.28),transparent_35%),radial-gradient(circle_at_80%_30%,rgba(34,211,238,0.16),transparent_38%)]" />
+
+        <div className="relative z-10 mb-5 flex items-center gap-2">
+          <span className="h-3 w-3 rounded-full bg-red-400" />
+          <span className="h-3 w-3 rounded-full bg-yellow-300" />
+          <span className="h-3 w-3 rounded-full bg-emerald-400" />
+          <span className="ml-auto rounded-full bg-white/10 px-3 py-1 text-xs text-white/60">
+            portfolio.jsx
+          </span>
+        </div>
+
+        <div className="relative z-10 space-y-3 font-mono text-sm leading-6 text-white/75">
+          <p>
+            <span className="text-cyan-300">const</span>{" "}
+            <span className="text-purple-300">developer</span> = &#123;
+          </p>
+          <p className="pl-5">
+            name: <span className="text-emerald-300">"Soham Sanyal"</span>,
+          </p>
+          <p className="pl-5">
+            role: <span className="text-emerald-300">"Full Stack Developer"</span>,
+          </p>
+          <p>&#125;;</p>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const Hero = () => {
-  const fullText = "Hi, I'm Soham";
-  const secondText = "Full Stack Developer";
-
-  const [displayedText, setDisplayedText] = useState("");
-  const [secondDisplayedText, setSecondDisplayedText] = useState("");
+  const [deviceProfile, setDeviceProfile] = useState(() => getDeviceProfile());
+  const [showCanvas, setShowCanvas] = useState(false);
 
   useEffect(() => {
-    let index = 0;
+    const updateDeviceProfile = () => {
+      setDeviceProfile(getDeviceProfile());
+    };
 
-    const interval = setInterval(() => {
-      setDisplayedText(fullText.slice(0, index + 1));
-      index++;
+    updateDeviceProfile();
+    window.addEventListener("resize", updateDeviceProfile);
 
-      if (index === fullText.length) {
-        clearInterval(interval);
-
-        // Start second typing after short delay
-        setTimeout(() => {
-          let secondIndex = 0;
-
-          const secondInterval = setInterval(() => {
-            setSecondDisplayedText(
-              secondText.slice(0, secondIndex + 1)
-            );
-            secondIndex++;
-
-            if (secondIndex === secondText.length) {
-              clearInterval(secondInterval);
-            }
-          }, 70);
-
-        }, 400);
-      }
-    }, 70);
-
-    return () => clearInterval(interval);
+    return () => window.removeEventListener("resize", updateDeviceProfile);
   }, []);
+
+  useEffect(() => {
+    const { isMobile, prefersReducedMotion, canUseWebGL } = deviceProfile;
+
+    if (isMobile || prefersReducedMotion || !canUseWebGL) {
+      setShowCanvas(false);
+      return;
+    }
+
+    let timeoutId;
+    let idleId;
+
+    const loadCanvas = () => setShowCanvas(true);
+
+    if ("requestIdleCallback" in window) {
+      idleId = window.requestIdleCallback(loadCanvas, { timeout: 700 });
+    } else {
+      timeoutId = window.setTimeout(loadCanvas, 450);
+    }
+
+    return () => {
+      if (idleId && "cancelIdleCallback" in window) {
+        window.cancelIdleCallback(idleId);
+      }
+
+      if (timeoutId) {
+        window.clearTimeout(timeoutId);
+      }
+    };
+  }, [deviceProfile]);
 
   return (
     <section
-      className="relative w-full min-h-screen mx-auto bg-cover bg-center bg-no-repeat"
-      style={{ backgroundImage: "url('/my-bg.png.png')" }}
+      id="home"
+      className="relative min-h-screen w-full overflow-hidden bg-[#02030d] bg-cover bg-center bg-no-repeat text-white"
+      style={{
+        backgroundImage:
+          "linear-gradient(90deg, rgba(0,0,0,0.18), rgba(0,0,0,0.05)), url('/my-bg.png.png')",
+      }}
     >
-      {/* LEFT TEXT CONTENT */}
+      <div className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_16%_20%,rgba(145,94,255,0.16),transparent_28%),radial-gradient(circle_at_82%_32%,rgba(34,211,238,0.12),transparent_32%)]" />
+
+      <div className="absolute inset-x-0 bottom-0 z-10 h-[58vh] min-h-[520px] overflow-visible sm:h-[62vh] sm:min-h-[560px] lg:h-[65vh] lg:min-h-[620px]">
+        {showCanvas ? (
+          <Suspense fallback={<HeroCanvasFallback />}>
+            <ComputersCanvas />
+          </Suspense>
+        ) : (
+          <HeroCanvasFallback />
+        )}
+      </div>
+
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-32 bg-gradient-to-t from-black/45 to-transparent" />
+
       <div
-        className={`absolute left-0 right-0 max-w-7xl mx-auto ${styles.paddingX} mt-10 flex flex-row items-start gap-5`}
+        className={`pointer-events-none absolute left-0 right-0 top-[4.7rem] z-30 mx-auto flex max-w-7xl flex-row items-start gap-5 ${styles.paddingX}`}
       >
-        <div className="flex flex-col justify-center items-center mt-5">
-          <div className="w-5 h-5 rounded-full bg-[#915EFF]" />
-          <div className="w-1 sm:h-80 h-40 violet-gradient" />
-        </div>
+        <motion.div
+          initial={{ opacity: 0, scaleY: 0.4 }}
+          animate={{ opacity: 1, scaleY: 1 }}
+          transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+          className="mt-2 flex origin-top flex-col items-center justify-center"
+        >
+          <div className="h-5 w-5 rounded-full bg-[#915EFF] shadow-[0_0_30px_rgba(145,94,255,0.9)]" />
+          <div className="violet-gradient h-40 w-1 sm:h-80" />
+        </motion.div>
 
         <div>
-          {/* First Typing Heading */}
-          <h1 className={`${styles.heroHeadText} text-white`}>
-            {displayedText}
-            <span className="text-[#915EFF] animate-pulse">|</span>
-          </h1>
-
-          {/* Second Typing Line */}
-          <h2 className="mt-2 text-[#915EFF] text-2xl sm:text-3xl font-semibold">
-            {secondDisplayedText}
-          </h2>
-
-          {/* Subtitle appears after first typing */}
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{
-              opacity: displayedText.length === fullText.length ? 1 : 0,
-              y: displayedText.length === fullText.length ? 0 : 20,
+          <motion.h1
+            initial={{ opacity: 0, y: 28, filter: "blur(6px)" }}
+            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+            transition={{
+              duration: 0.55,
+              ease: [0.16, 1, 0.3, 1],
             }}
-            transition={{ duration: 0.6 }}
-            className={`${styles.heroSubText} mt-2 text-white-100`}
+            className={`${styles.heroHeadText} text-white`}
+          >
+            Hi, I&apos;m Soham
+          </motion.h1>
+
+          <motion.h2
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{
+              duration: 0.45,
+              delay: 0.12,
+              ease: [0.16, 1, 0.3, 1],
+            }}
+            className="mt-2 text-2xl font-semibold text-[#915EFF] sm:text-3xl"
+          >
+            Full Stack Developer
+          </motion.h2>
+
+          <motion.p
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{
+              duration: 0.5,
+              delay: 0.22,
+              ease: [0.16, 1, 0.3, 1],
+            }}
+            className={`${styles.heroSubText} mt-4 text-white-100`}
           >
             A Developer Dedicated to Crafting{" "}
-            <br className="sm:block hidden" />
+            <br className="hidden sm:block" />
             Modern & Scalable Web Solutions
           </motion.p>
         </div>
       </div>
 
-      {/* 3D MODEL SECTION */}
-      <div className="relative w-full h-[520px] sm:absolute sm:bottom-0 sm:h-[600px] mt-10 sm:mt-0 overflow-hidden">
-        <ComputersCanvas />
-      </div>
-
-      {/* SCROLL INDICATOR */}
-      <div className="absolute bottom-6 w-full flex justify-center items-center">
-        <a href="#about">
-          <div className="w-[35px] h-[64px] rounded-3xl border-4 border-secondary flex justify-center items-start p-2">
+      <div className="absolute bottom-6 z-40 flex w-full items-center justify-center">
+        <a href="#about" aria-label="Scroll to about section">
+          <div className="flex h-[64px] w-[35px] items-start justify-center rounded-3xl border-4 border-secondary p-2">
             <motion.div
               animate={{ y: [0, 24, 0] }}
               transition={{
                 duration: 1.5,
                 repeat: Infinity,
               }}
-              className="w-3 h-3 rounded-full bg-secondary mb-1"
+              className="mb-1 h-3 w-3 rounded-full bg-secondary"
             />
           </div>
         </a>

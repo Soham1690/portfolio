@@ -1,163 +1,101 @@
-import { motion, useMotionValue, useSpring } from "framer-motion";
-import { myProjects as baseProjects } from "../constants";
-import { useRef } from "react";
+import { motion } from "framer-motion";
+import { myProjects } from "../constants";
 
-const parkinsonProject = {
-  id: 999,
-  title: "Parkinson Disease Classification using AI/ML",
-  description:
-    "An ultra-premium clinical-style machine learning web app that predicts Parkinsonian voice-pattern risk using biomedical speech biomarkers, a FastAPI backend, and a deployed Vercel frontend.",
-  image:
-    "https://plus.unsplash.com/premium_photo-1661767897334-bbfbdfdc4d1a?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTN8fGhlYWx0aGNhcmV8ZW58MHx8MHx8fDA%3D",
-  href: "https://parkinsons-frontend.vercel.app/",
-  tags: [
-    { id: 101, name: "React" },
-    { id: 102, name: "Vite" },
-    { id: 103, name: "FastAPI" },
-    { id: 104, name: "scikit-learn" },
-    { id: 105, name: "AI/ML" },
-    { id: 106, name: "Vercel" },
-  ],
-};
-
-const drowsinessProject = {
-  id: 1000,
-  title: "Driver Drowsiness Detection using AI/ML",
-  description:
-    "A premium real-time driver safety web app that detects drowsiness using computer vision, head-down monitoring, alert systems, incident snapshots, and a deployed FastAPI + Vercel setup.",
-  image: "/images/drowsiness-dashboard.png",
-  href: "https://drowsiness-detection-system-five.vercel.app/",
-  tags: [
-    { id: 107, name: "React" },
-    { id: 108, name: "FastAPI" },
-    { id: 109, name: "OpenCV" },
-    { id: 110, name: "MediaPipe" },
-    { id: 111, name: "AI/ML" },
-    { id: 112, name: "Vercel" },
-  ],
-};
-
-const myProjects = Array.isArray(baseProjects)
-  ? baseProjects.length > 0
-    ? [baseProjects[0], parkinsonProject, drowsinessProject, ...baseProjects.slice(1)]
-    : [parkinsonProject, drowsinessProject]
-  : [parkinsonProject, drowsinessProject];
-
-const ProjectCard = ({ project }) => {
-  const cardRef = useRef(null);
-
-  const rawX = useMotionValue(0);
-  const rawY = useMotionValue(0);
-
-  const rotateX = useSpring(rawX, { stiffness: 200, damping: 25 });
-  const rotateY = useSpring(rawY, { stiffness: 200, damping: 25 });
-
-  const handleMouseMove = (e) => {
-    if (!cardRef.current) return;
-
-    const rect = cardRef.current.getBoundingClientRect();
-    const width = rect.width;
-    const height = rect.height;
-
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-
-    const intensity = 18;
-
-    const rotateYValue = ((x / width) - 0.5) * intensity;
-
-    const bottomZone = Math.min((height - y) / (height * 150), 100);
-    const verticalFactor = 1 - bottomZone;
-    const rotateXValue = Math.pow(verticalFactor, 2) * intensity;
-
-    rawX.set(rotateXValue);
-    rawY.set(rotateYValue);
-  };
-
-  const handleMouseLeave = () => {
-    rawX.set(0);
-    rawY.set(0);
-  };
-
-  const liveLink =
+const getProjectLink = (project) => {
+  return (
     project.href ||
     project.link ||
     project.url ||
-    (project.title === "E-commerce Platform"
-      ? "https://www.soham.buzz/"
-      : null);
+    (project.title === "E-commerce Platform" ? "https://www.soham.buzz/" : "")
+  );
+};
+
+const ProjectCard = ({ project, index }) => {
+  const projectLink = getProjectLink(project);
 
   return (
-    <div className="relative group h-full w-full max-w-[420px]">
-      {liveLink && (
-        <div className="absolute -top-10 left-1/2 -translate-x-1/2 flex flex-col items-center opacity-0 group-hover:opacity-100 transition duration-300 z-30">
-          <a
-            href={liveLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={(e) => e.stopPropagation()}
-            className="px-4 py-1 text-sm text-white rounded-full bg-white/10 backdrop-blur-md border border-white/20 shadow-md hover:bg-white/20 transition"
-          >
-            Visit Site
-          </a>
+    <motion.article
+      initial={{ opacity: 0, y: 42 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{
+        duration: 0.55,
+        delay: index * 0.06,
+        ease: "easeOut",
+      }}
+      viewport={{ once: true, amount: 0.16 }}
+      className="group relative flex min-h-[39rem] w-full flex-col overflow-hidden rounded-[1.6rem] border border-white/10 bg-[#10111d] shadow-2xl shadow-black/35 transition duration-300 hover:-translate-y-2 hover:border-purple-300/40 hover:bg-[#151727]"
+    >
+      <div className="absolute inset-0 bg-gradient-to-br from-white/[0.07] via-transparent to-purple-500/[0.08] opacity-0 transition duration-300 group-hover:opacity-100" />
 
-          <div className="w-[2px] h-16 bg-cyan-400 shadow-[0_0_15px_rgba(0,255,255,0.8)] mt-1" />
-        </div>
-      )}
+      <div className="relative h-[17.5rem] w-full overflow-hidden">
+        <img
+          src={project.image}
+          alt={project.title}
+          loading="lazy"
+          className="h-full w-full object-cover opacity-95 transition duration-500 group-hover:scale-105"
+        />
 
-      <motion.div
-        ref={cardRef}
-        onMouseMove={handleMouseMove}
-        onMouseLeave={handleMouseLeave}
-        style={{
-          rotateX,
-          rotateY,
-          transformPerspective: 2000,
-        }}
-        className="bg-[#0f0f1a] rounded-xl border border-white/10 shadow-xl hover:shadow-indigo-500/30 transition duration-300 overflow-hidden h-full flex flex-col"
-      >
-        <div className="overflow-hidden rounded-t-xl">
-          <img
-            src={project.image}
-            alt={project.title}
-            className="w-full h-56 object-cover transition duration-400"
-          />
-        </div>
+        <div className="absolute inset-0 bg-gradient-to-t from-[#10111d] via-transparent to-transparent" />
+      </div>
 
-        <div className="p-6 flex flex-col flex-1">
-          <h3 className="text-xl font-semibold leading-tight min-h-[64px]">
-            {project.title}
-          </h3>
+      <div className="relative z-10 flex flex-1 flex-col px-8 pb-8 pt-8">
+        <h3 className="text-[1.7rem] font-black leading-tight tracking-tight text-white">
+          {project.title}
+        </h3>
 
-          <p className="text-gray-400 text-sm leading-relaxed min-h-[120px] mt-4">
-            {project.description}
-          </p>
+        <p className="mt-8 text-[1.08rem] leading-8 text-white/58">
+          {project.description}
+        </p>
 
-          <div className="flex gap-2 flex-wrap pt-2 min-h-[76px] content-start">
-            {project.tags.map((tag) => (
-              <span
-                key={tag.id}
-                className="text-xs bg-white/10 px-3 py-1 rounded-full"
-              >
-                {tag.name}
-              </span>
+        {project.subDescription?.length > 0 && (
+          <ul className="mt-5 grid gap-2 text-sm leading-6 text-white/50">
+            {project.subDescription.slice(0, 3).map((item) => (
+              <li key={item} className="flex gap-2">
+                <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-cyan-200" />
+                <span>{item}</span>
+              </li>
             ))}
-          </div>
+          </ul>
+        )}
 
-          {liveLink && (
+        <div className="mt-8 flex flex-wrap gap-2">
+          {project.tags?.map((tag) => (
+            <span
+              key={`${project.id}-${tag.id || tag.name}`}
+              className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3.5 py-1.5 text-xs font-bold text-white/75"
+            >
+              {tag.path && (
+                <img
+                  src={tag.path}
+                  alt=""
+                  loading="lazy"
+                  className="h-4 w-4 object-contain"
+                />
+              )}
+              {tag.name}
+            </span>
+          ))}
+        </div>
+
+        <div className="mt-auto pt-9">
+          {projectLink ? (
             <a
-              href={liveLink}
+              href={projectLink}
               target="_blank"
               rel="noopener noreferrer"
-              onClick={(e) => e.stopPropagation()}
-              className="inline-flex items-center gap-2 mt-auto pt-4 text-indigo-400 hover:text-indigo-300 transition"
+              className="inline-flex items-center gap-2 text-base font-bold text-white transition hover:text-cyan-200"
             >
-              Check Live Site →
+              Check Live Site
+              <span className="transition group-hover:translate-x-1">→</span>
             </a>
+          ) : (
+            <span className="text-sm font-semibold text-white/35">
+              Live link coming soon
+            </span>
           )}
         </div>
-      </motion.div>
-    </div>
+      </div>
+    </motion.article>
   );
 };
 
@@ -165,16 +103,39 @@ const Projects = () => {
   return (
     <section
       id="work"
-      className="relative min-h-screen bg-[#050816] text-white py-24 px-6"
+      className="relative min-h-screen overflow-hidden bg-[#050816] py-24 text-white"
+      style={{
+        width: "100vw",
+        maxWidth: "100vw",
+        marginLeft: "calc(50% - 50vw)",
+        marginRight: "calc(50% - 50vw)",
+      }}
     >
-      <h2 className="text-5xl font-bold text-center mb-20">
-        My Projects
-      </h2>
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_14%_14%,rgba(145,94,255,0.16),transparent_32%),radial-gradient(circle_at_86%_18%,rgba(34,211,238,0.09),transparent_30%),linear-gradient(180deg,#050816_0%,#030412_100%)]" />
 
-      <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-16 max-w-7xl mx-auto [perspective:2000px] place-items-center items-stretch">
-        {myProjects.map((project) => (
-          <ProjectCard key={project.id} project={project} />
-        ))}
+      <div className="absolute inset-0 opacity-[0.055] [background-image:linear-gradient(rgba(255,255,255,.14)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.14)_1px,transparent_1px)] [background-size:72px_72px]" />
+
+      <div
+        className="relative z-10 w-full"
+        style={{
+          paddingLeft: "clamp(4.5rem, 7vw, 8.5rem)",
+          paddingRight: "clamp(4.5rem, 7vw, 8.5rem)",
+        }}
+      >
+        <h2 className="text-center text-6xl font-black tracking-tight text-white sm:text-7xl lg:text-[5.4rem]">
+          My Projects
+        </h2>
+
+        <div
+          className="mt-20 grid w-full grid-cols-1 md:grid-cols-2 xl:grid-cols-3"
+          style={{
+            gap: "clamp(3rem, 4.4vw, 5.5rem)",
+          }}
+        >
+          {myProjects.map((project, index) => (
+            <ProjectCard key={project.id} project={project} index={index} />
+          ))}
+        </div>
       </div>
     </section>
   );

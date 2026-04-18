@@ -1,23 +1,30 @@
 import { motion } from "framer-motion";
+
 const Card = ({ style, text, image, containerRef }) => {
-  return image && !text ? (
-    <motion.img
-      className="absolute w-15 cursor-grab"
-      src={image}
-      style={style}
-      whileHover={{ scale: 1.05 }}
-      drag
-      dragConstraints={containerRef}
-      dragElastic={1}
-    />
-  ) : (
+  if (image && !text) {
+    return (
+      <motion.img
+        className="absolute w-16 cursor-grab rounded-xl border border-white/10 bg-white/10 p-2 shadow-xl backdrop-blur-md"
+        src={image}
+        alt="Technology badge"
+        style={style}
+        whileHover={{ scale: 1.05 }}
+        drag
+        dragConstraints={containerRef}
+        dragElastic={0.7}
+        loading="lazy"
+      />
+    );
+  }
+
+  return (
     <motion.div
-      className="absolute px-1 py-4 text-xl text-center rounded-full ring ring-gray-700 font-extralight bg-storm w-48 cursor-grab"
+      className="absolute w-44 cursor-grab rounded-full border border-white/10 bg-storm/90 px-4 py-3 text-center text-base font-semibold text-white/80 shadow-xl backdrop-blur-md ring-1 ring-white/10"
       style={style}
       whileHover={{ scale: 1.05 }}
       drag
       dragConstraints={containerRef}
-      dragElastic={1}
+      dragElastic={0.7}
     >
       {text}
     </motion.div>
