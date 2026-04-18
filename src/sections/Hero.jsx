@@ -113,29 +113,15 @@ const Hero = () => {
   return (
     <section
       id="home"
-      className="relative min-h-screen w-full overflow-hidden bg-[#02030d] bg-cover bg-center bg-no-repeat text-white"
+      className="relative min-h-[100svh] w-full overflow-hidden bg-[#02030d] bg-cover bg-center bg-no-repeat text-white"
       style={{
         backgroundImage:
-          "linear-gradient(90deg, rgba(0,0,0,0.18), rgba(0,0,0,0.05)), url('/my-bg.png.png')",
+          "linear-gradient(90deg, rgba(0,0,0,0.22), rgba(0,0,0,0.06)), url('/my-bg.png.png')",
       }}
     >
       <div className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_16%_20%,rgba(145,94,255,0.16),transparent_28%),radial-gradient(circle_at_82%_32%,rgba(34,211,238,0.12),transparent_32%)]" />
 
-      <div className="absolute inset-x-0 bottom-0 z-10 h-[58vh] min-h-[520px] overflow-visible sm:h-[62vh] sm:min-h-[560px] lg:h-[65vh] lg:min-h-[620px]">
-        {showCanvas ? (
-          <Suspense fallback={<HeroCanvasFallback />}>
-            <ComputersCanvas />
-          </Suspense>
-        ) : (
-          <HeroCanvasFallback />
-        )}
-      </div>
-
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-32 bg-gradient-to-t from-black/45 to-transparent" />
-
-      <div
-        className={`pointer-events-none absolute left-0 right-0 top-[4.7rem] z-30 mx-auto flex max-w-7xl flex-row items-start gap-5 ${styles.paddingX}`}
-      >
+      <div className="absolute left-0 right-0 top-[4.8rem] z-30 mx-auto flex max-w-7xl flex-row items-start gap-5 px-6 sm:px-10 lg:px-16">
         <motion.div
           initial={{ opacity: 0, scaleY: 0.4 }}
           animate={{ opacity: 1, scaleY: 1 }}
@@ -143,15 +129,15 @@ const Hero = () => {
           className="mt-2 flex origin-top flex-col items-center justify-center"
         >
           <div className="h-5 w-5 rounded-full bg-[#915EFF] shadow-[0_0_30px_rgba(145,94,255,0.9)]" />
-          <div className="violet-gradient h-40 w-1 sm:h-80" />
+          <div className="violet-gradient h-36 w-1 sm:h-64 lg:h-72" />
         </motion.div>
 
-        <div>
+        <div className="max-w-[48rem]">
           <motion.h1
-            initial={{ opacity: 0, y: 28, filter: "blur(6px)" }}
-            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{
-              duration: 0.55,
+              duration: 0.5,
               ease: [0.16, 1, 0.3, 1],
             }}
             className={`${styles.heroHeadText} text-white`}
@@ -160,11 +146,11 @@ const Hero = () => {
           </motion.h1>
 
           <motion.h2
-            initial={{ opacity: 0, y: 18 }}
+            initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{
-              duration: 0.45,
-              delay: 0.12,
+              duration: 0.42,
+              delay: 0.08,
               ease: [0.16, 1, 0.3, 1],
             }}
             className="mt-2 text-2xl font-semibold text-[#915EFF] sm:text-3xl"
@@ -173,14 +159,14 @@ const Hero = () => {
           </motion.h2>
 
           <motion.p
-            initial={{ opacity: 0, y: 18 }}
+            initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{
-              duration: 0.5,
-              delay: 0.22,
+              duration: 0.46,
+              delay: 0.16,
               ease: [0.16, 1, 0.3, 1],
             }}
-            className={`${styles.heroSubText} mt-4 text-white-100`}
+            className={`${styles.heroSubText} mt-4 max-w-[42rem] text-white-100`}
           >
             A Developer Dedicated to Crafting{" "}
             <br className="hidden sm:block" />
@@ -188,6 +174,20 @@ const Hero = () => {
           </motion.p>
         </div>
       </div>
+
+      <div className="absolute inset-x-0 bottom-0 z-10 h-[54svh] min-h-[430px] max-h-[620px] overflow-visible sm:h-[56svh] sm:min-h-[470px] lg:h-[58svh] lg:min-h-[500px]">
+        <div className="absolute inset-x-0 bottom-0 h-full translate-y-[6%]">
+          {showCanvas ? (
+            <Suspense fallback={<HeroCanvasFallback />}>
+              <ComputersCanvas />
+            </Suspense>
+          ) : (
+            <HeroCanvasFallback />
+          )}
+        </div>
+      </div>
+
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-32 bg-gradient-to-t from-black/45 to-transparent" />
 
       <div className="absolute bottom-6 z-40 flex w-full items-center justify-center">
         <a href="#about" aria-label="Scroll to about section">
