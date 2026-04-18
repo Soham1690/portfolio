@@ -2,7 +2,7 @@ import { Suspense, useEffect, useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import { Html, OrbitControls, Preload, useGLTF } from "@react-three/drei";
 
-const Planet = ({ isMobile }) => {
+const Planet = () => {
   const { scene } = useGLTF("/planet/scene.gltf");
 
   useEffect(() => {
@@ -19,41 +19,19 @@ const Planet = ({ isMobile }) => {
     });
   }, [scene]);
 
-  return (
-    <primitive
-      object={scene}
-      scale={isMobile ? 5 : 7}
-      position={isMobile ? [0, -0.5, 0] : [0, -0.8, 0]}
-    />
-  );
+  return <primitive object={scene} scale={6.6} position={[0, -0.8, 0]} />;
 };
 
 const PlanetLoading = () => (
   <Html center>
-    <div className="rounded-full border border-white/10 bg-black/40 px-4 py-2 text-xs font-semibold text-white/70 backdrop-blur-md">
+    <div className="rounded-full border border-white/10 bg-black/40 px-4 py-2 text-xs font-semibold text-white/70">
       Loading planet
     </div>
   </Html>
 );
 
 const PlanetCanvas = () => {
-  const [isMobile, setIsMobile] = useState(false);
   const [hasContextError, setHasContextError] = useState(false);
-
-  useEffect(() => {
-    const mediaQuery = window.matchMedia("(max-width: 768px)");
-
-    const updateMobileState = () => {
-      setIsMobile(mediaQuery.matches);
-    };
-
-    updateMobileState();
-    mediaQuery.addEventListener("change", updateMobileState);
-
-    return () => {
-      mediaQuery.removeEventListener("change", updateMobileState);
-    };
-  }, []);
 
   if (hasContextError) {
     return (
@@ -68,14 +46,14 @@ const PlanetCanvas = () => {
       <Canvas
         className="absolute inset-0 h-full w-full bg-transparent"
         frameloop="always"
-        dpr={[1, 1.35]}
+        dpr={[1, 1]}
         camera={{
-          position: isMobile ? [0, 0, 18] : [0, 0, 14],
-          fov: isMobile ? 75 : 65,
+          position: [0, 0, 14],
+          fov: 65,
         }}
         gl={{
           alpha: true,
-          antialias: true,
+          antialias: false,
           powerPreference: "high-performance",
           preserveDrawingBuffer: false,
         }}
@@ -88,17 +66,17 @@ const PlanetCanvas = () => {
         }}
       >
         <Suspense fallback={<PlanetLoading />}>
-          <ambientLight intensity={0.6} />
-          <directionalLight position={[2, 5, 2]} intensity={1.2} />
+          <ambientLight intensity={0.65} />
+          <directionalLight position={[2, 5, 2]} intensity={1.15} />
 
           <OrbitControls
             enableZoom={false}
             enablePan={false}
             autoRotate
-            autoRotateSpeed={1.2}
+            autoRotateSpeed={0.8}
           />
 
-          <Planet isMobile={isMobile} />
+          <Planet />
 
           <Preload all />
         </Suspense>
